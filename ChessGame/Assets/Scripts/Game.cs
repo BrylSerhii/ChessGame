@@ -139,7 +139,7 @@ public class Game : MonoBehaviour
         gameOver = true;
 
         GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().enabled = true;
-        GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().text = playerWinner + "is the winner";
+        GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().text = playerWinner + " - is the winner";
 
 
         GameObject.FindGameObjectWithTag("RestartText").GetComponent<Text>().enabled = true;
