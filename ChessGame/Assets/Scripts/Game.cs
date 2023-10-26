@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -45,7 +47,7 @@ public class Game : MonoBehaviour
             Create("black_queen", 3, 7),
             Create("black_king", 4, 7),
             Create("black_bishop", 5, 7),
-            Create("black_kinght", 6, 7),
+            Create("black_knight", 6, 7),
             Create("black_rook", 7, 7),
             Create("black_pawn", 0, 6),
             Create("black_pawn", 1, 6),
@@ -98,5 +100,48 @@ public class Game : MonoBehaviour
         if(x < 0 || y < 0) return false;
         if(x >= positions.GetLength(0) || y >= positions.GetLength(1) ) return false;
         return true;
+    }
+
+    public string GetCurrentPlayer()
+    {
+        return currentPlayer;
+    }
+
+    public bool IsGameOver()
+    {
+        return gameOver;
+    }
+
+    public void NextTurn()
+    {
+        if( currentPlayer == "white" )
+        {
+            currentPlayer = "black";
+        }
+        else
+        {
+            currentPlayer = "white";
+        }
+    }
+
+    public void Update()
+    {
+        if( gameOver == true && Input.GetMouseButtonDown(0))
+        {
+            gameOver = false;
+
+            SceneManager.LoadScene("Game");
+        }
+    }
+
+    public void Winner(string playerWinner)
+    {
+        gameOver = true;
+
+        GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().enabled = true;
+        GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().text = playerWinner + "is the winner";
+
+
+        GameObject.FindGameObjectWithTag("RestartText").GetComponent<Text>().enabled = true;
     }
 }
