@@ -216,21 +216,24 @@ public class ChessMan : MonoBehaviour
     public void PawnMovePlate(int x, int y)
     {
         Game sc = controller.GetComponent<Game>();
-        if( sc.IsPositionOnBoard(x,y))
+        if (sc.IsPositionOnBoard(x, y))
         {
-            MovePlateSpawn(x,y);
-        }
+            if(sc.GetPosition(x, y) == null)
+            {
+                MovePlateSpawn(x, y);
+            }
+       
+            if (sc.IsPositionOnBoard(x + 1, y) && sc.GetPosition(x + 1, y) != null &&
+                sc.GetPosition(x + 1, y).GetComponent<ChessMan>().player != player)
+            {
+                MovePlateAttackSpawn(x + 1, y);
+            }
 
-        if(sc.IsPositionOnBoard(x + 1, y) && sc.GetPosition(x + 1,y) != null &&
-            sc.GetPosition(x + 1, y).GetComponent<ChessMan>().player != player)
-        {
-            MovePlateAttackSpawn(x + 1, y);
-        }
-
-        if (sc.IsPositionOnBoard(x - 1, y) && sc.GetPosition(x - 1, y) != null &&
-         sc.GetPosition(x - 1, y).GetComponent<ChessMan>().player != player)
-        {
-            MovePlateAttackSpawn(x - 1, y);
+            if (sc.IsPositionOnBoard(x - 1, y) && sc.GetPosition(x - 1, y) != null &&
+             sc.GetPosition(x - 1, y).GetComponent<ChessMan>().player != player)
+            {
+                MovePlateAttackSpawn(x - 1, y);
+            }
         }
     }
 
