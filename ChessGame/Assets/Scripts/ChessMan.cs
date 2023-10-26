@@ -187,8 +187,8 @@ public class ChessMan : MonoBehaviour
     {
         PointMovePlate(xBoard, yBoard + 1);;
         PointMovePlate(xBoard, yBoard - 1);
-        PointMovePlate(xBoard + 1, yBoard);
-        PointMovePlate(xBoard - 1, yBoard);
+        PointMovePlate(xBoard + 1, yBoard + 0);
+        PointMovePlate(xBoard - 1, yBoard + 0);
         PointMovePlate(xBoard + 1, yBoard + 1);
         PointMovePlate(xBoard + 1, yBoard - 1);
         PointMovePlate(xBoard - 1, yBoard - 1);
@@ -202,7 +202,7 @@ public class ChessMan : MonoBehaviour
         {
             GameObject cp = sc.GetPosition(x, y);
 
-            if( cp = null)
+            if( cp == null)
             {
                 MovePlateSpawn(x, y);
             }
