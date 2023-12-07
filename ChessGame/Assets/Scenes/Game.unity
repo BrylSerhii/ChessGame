@@ -308,7 +308,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.6509434, g: 0.24195442, b: 0.601505, a: 0}
+  m_BackGroundColor: {r: 0.509434, g: 0.49693844, b: 0.50787205, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -364,6 +364,66 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1139338234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1139338236}
+  - component: {fileID: 1139338235}
+  m_Layer: 0
+  m_Name: ChessPieces
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1139338235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139338234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda4fee906335c34281bb08f8484e3a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _xBoard: 0
+  _yBoard: 0
+  pieceType: 
+  playerColor: 
+  whitePawnPrefab: {fileID: 187706858587961596, guid: e9e24f4f8bdf69b498c9f5571f49cc8b, type: 3}
+  whiteRookPrefab: {fileID: 6683317212700647206, guid: 4381cf6c12da6e34bb3435af66a53056, type: 3}
+  whiteKnightPrefab: {fileID: 7513849038961747917, guid: 0111d373301aaa34689dd5afb574a93e, type: 3}
+  whiteBishopPrefab: {fileID: 3300947257207095393, guid: b0032bec14f66bc4a9b218135f32c078, type: 3}
+  whiteQueenPrefab: {fileID: 6543823887861168942, guid: 2a66b96e96a34744ab2ec0178da032fb, type: 3}
+  whiteKingPrefab: {fileID: 8490584875828537631, guid: b4974720a24d49045b51b9b5d3267862, type: 3}
+  blackPawnPrefab: {fileID: 4712406435235332117, guid: 8085a1562c80856488b89bacb4162e1b, type: 3}
+  blackRookPrefab: {fileID: 805847655587975937, guid: 4b856923bf2e4164590d9a19ba7a0a8d, type: 3}
+  blackKnightPrefab: {fileID: 1628162176428464482, guid: 19728aff2464eb44b8217a6514c663cb, type: 3}
+  blackBishopPrefab: {fileID: 820066468152149159, guid: cc78535276d7d5947b9d6d816c606f1e, type: 3}
+  blackQueenPrefab: {fileID: 1704973274571731905, guid: fff3b39918558a64ca6796c78b1d83c0, type: 3}
+  blackKingPrefab: {fileID: 5223177334428164066, guid: 212b319ea727d6547b2d49ab237148b5, type: 3}
+--- !u!4 &1139338236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139338234}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.24016929, y: 0.505963, z: 27.093384}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1384328311
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,43 +468,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d6bff48e3735e844bd425360598354a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chesspiece: {fileID: 1823962517478107310, guid: c2ba8582e7780f1459a2df56f6329c3d, type: 3}
-  playerBlack:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  playerWhite:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  currentPlayer: white
-  gameOver: 0
 --- !u!1 &1446184538
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,20 +675,36 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -7828442533398638680, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
+      propertyPath: _xBoard
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -7828442533398638680, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
+      propertyPath: _yBoard
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -7828442533398638680, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
       propertyPath: _tilePrefab
       value: 
       objectReference: {fileID: 5269372337535316636, guid: a3d071d8ec5543d4ca8e4abfe47430ba, type: 3}
     - target: {fileID: 2624667800553180958, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2624667800553180958, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2624667800553180958, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.43409243
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2624667800553180958, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5877562
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2624667800553180958, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 59.14492
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2624667800553180958, guid: 03339be71be18bb42ad59864ec8f1ba6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -709,6 +748,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1384328312}
+  - {fileID: 1139338236}
   - {fileID: 1132595831079406405}
   - {fileID: 519420032}
   - {fileID: 74944006}
