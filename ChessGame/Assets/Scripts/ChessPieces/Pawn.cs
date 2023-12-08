@@ -10,9 +10,9 @@ public class Pawn : ChessPiece
             // White pawns can move forward one square
             CreateMovePlate(_xBoard, _yBoard + 1);
 
-            // White pawns can capture diagonally
-            CreateMovePlate(_xBoard - 1, _yBoard + 1);
-            CreateMovePlate(_xBoard + 1, _yBoard + 1);
+            //// White pawns can capture diagonally
+            //CreateMovePlate(_xBoard - 1, _yBoard + 1);
+            //CreateMovePlate(_xBoard + 1, _yBoard + 1);
         }
         else if (playerColor == "black")
         {
