@@ -27,15 +27,6 @@ public class ChessBoard : MonoBehaviour
 
 
     }
-    public GameObject pawnPrefab; // Assign this in the Inspector
-
-    void SpawnPawn(int x, int y)
-    {
-        GameObject newPawn = Instantiate(pawnPrefab, new Vector3(x, y, 0), Quaternion.identity);
-        Pawn pawn = newPawn.AddComponent<Pawn>();
-        // Initialize the pawn...
-        pawn.SetBoardPosition(x, y);
-    }
 
     //public void SpawnAllPieces()
     //{

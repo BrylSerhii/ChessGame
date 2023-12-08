@@ -50,6 +50,8 @@ public class ChessPiece : MonoBehaviour
     public GameObject blackQueenPrefab;
     public GameObject blackKingPrefab;
 
+    public GameObject movePlatePrefab;
+
     void SpawnSinglePiece(int x, int y, string pieceType, string color)
     {
         //Debug.Log("Spawning " + pieceType + " at " + x + ", " + y);
@@ -105,7 +107,32 @@ public class ChessPiece : MonoBehaviour
             piece.pieceType = pieceType;
         }
     }
+    public virtual void CreateMovePlate(int x, int y)
+    {
+        // Check if the position is on the board
+        if (x >= 0 && x < 8 && y >= 0 && y < 8)
+        {
+            // Instantiate the move plate prefab
+            GameObject mp = Instantiate(movePlatePrefab, new Vector3(x, y, -1), Quaternion.identity);
 
+            // Set the reference to this pawn
+            mp.GetComponent<MovePlate>().SetReference(gameObject);
+
+            Debug.Log("MovePlate instantiated at position: " + mp.transform.position);
+            Debug.Log("Creating move plate at position: " + x + ", " + y);
+
+        }
+    }
+    public virtual void GenerateMovePlates()
+    {
+        // Pawns can move forward one square
+        CreateMovePlate(_xBoard, _yBoard + 1);
+        Debug.Log("Generating move plates for piece at position: " + _xBoard + ", " + _yBoard);
+
+        // Pawns can capture diagonally
+        CreateMovePlate(_xBoard - 1, _yBoard + 1);
+        CreateMovePlate(_xBoard + 1, _yBoard + 1);
+    }
     void SpawnAllPieces()
     {
         //// Spawn pawns
@@ -164,6 +191,7 @@ public class ChessPiece : MonoBehaviour
 
     public void Move(int newX, int newY, ChessBoard board)
     {
+
         if (CanMove(newX, newY, board))
         {
             // Update board position
@@ -175,4 +203,13 @@ public class ChessPiece : MonoBehaviour
             // Check for captures and other special actions based on move
         }
     }
+    public void DestroyMovePlates()
+    {
+        GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
+        foreach (GameObject movePlate in movePlates)
+        {
+            Destroy(movePlate);
+        }
+    }
+
 }

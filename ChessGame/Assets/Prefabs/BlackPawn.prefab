@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5382185468884223475}
   - component: {fileID: -3825209598577142183}
+  - component: {fileID: 5432737892808864876}
+  - component: {fileID: -3494619090048094569}
   m_Layer: 0
   m_Name: BlackPawn
   m_TagString: Untagged
@@ -84,3 +86,77 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &5432737892808864876
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712406435235332117}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.28, y: 1.28}
+    newSize: {x: 1.28, y: 1.28}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.28, y: 1.28}
+  m_EdgeRadius: 0
+--- !u!114 &-3494619090048094569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712406435235332117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c0eb2b9171457041b510c695858afce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _xBoard: 0
+  _yBoard: 0
+  pieceType: 
+  playerColor: 
+  whitePawnPrefab: {fileID: 0}
+  whiteRookPrefab: {fileID: 0}
+  whiteKnightPrefab: {fileID: 0}
+  whiteBishopPrefab: {fileID: 0}
+  whiteQueenPrefab: {fileID: 0}
+  whiteKingPrefab: {fileID: 0}
+  blackPawnPrefab: {fileID: 0}
+  blackRookPrefab: {fileID: 0}
+  blackKnightPrefab: {fileID: 0}
+  blackBishopPrefab: {fileID: 0}
+  blackQueenPrefab: {fileID: 0}
+  blackKingPrefab: {fileID: 0}
+  movePlatePrefab: {fileID: 6361536401758495996, guid: e8b9da72a5b0f7742a11da980dbfa57f, type: 3}
