@@ -1,47 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public ChessBoard chessBoard; // Assign this in the Inspector
+    // The game board
+    public GameObject[] Board;
 
-    private GameObject selectedPiece;
+    // The selected piece
+    public GameObject Piece_Selected;
 
+    // The current player's color
+    private string currentPlayerColor = "White";
+
+    // Update is called once per frame
     void Update()
     {
-
-        CheckUserInput();
-    }
-
-    void CheckUserInput()
-    {
+        // Check if the left mouse button was clicked
         if (Input.GetMouseButtonDown(0))
         {
-            // Get mouse position in world coordinates
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // Create a ray from the camera to the position of the mouse cursor
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            // Check if a chess piece was clicked
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-            if (hit.collider != null && hit.collider.GetComponent<ChessPiece>() != null)
+            // Perform a raycast
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                // Select the piece
-                selectedPiece = hit.collider.gameObject;
+                // Check if a piece was hit
+                if (hit.transform.name.StartsWith(currentPlayerColor))
+                {
+                    // Store the selected piece
+                    Piece_Selected = hit.transform.gameObject;
 
-                // Generate move plates for the piece
-                selectedPiece.GetComponent<ChessPiece>().GenerateMovePlates();
-            }
-            // Check if a move plate was clicked
-            else if (hit.collider != null && hit.collider.GetComponent<MovePlate>() != null)
-            {
-                // Move the selected piece to the new position
-                MovePlate movePlate = hit.collider.GetComponent<MovePlate>();
-                selectedPiece.GetComponent<ChessPiece>().Move(movePlate.GetXBoard(), movePlate.GetYBoard(), chessBoard);
+                    // Get the script attached to the selected piece
+                    var pieceScript = Piece_Selected.GetComponent<MonoBehaviour>();
 
-                // Destroy the move plates
-                selectedPiece.GetComponent<ChessPiece>().DestroyMovePlates();
+                    // Use reflection to call the Move method of the script
+                    var moveMethod = pieceScript.GetType().GetMethod("Move");
+                    if (moveMethod != null)
+                    {
+                        moveMethod.Invoke(pieceScript, null);
+                    }
+
+                    // Switch the current player's color
+                    currentPlayerColor = currentPlayerColor == "White" ? "Black" : "White";
+                }
             }
         }
     }
-
 }

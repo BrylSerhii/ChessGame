@@ -8,6 +8,7 @@ public class ChessPiece : MonoBehaviour
 
     public string pieceType;
     public string playerColor;
+    public bool isWhite;
 
     public void Start()
     {
@@ -17,6 +18,13 @@ public class ChessPiece : MonoBehaviour
     {
         _xBoard = x;
         _yBoard = y;
+    }
+    public void SetPosition(GameObject obj)
+    {
+        ChessPiece cm = obj.GetComponent<ChessPiece>();
+
+        //Overwrites either empty space or whatever was there
+        positions[cm.GetXBoard(), cm.GetYBoard()] = obj;
     }
 
     public int GetXBoard()
@@ -28,13 +36,17 @@ public class ChessPiece : MonoBehaviour
     {
         return _yBoard;
     }
-    public Vector3 GetWorldPositionFromBoardIndex(int x, int y)
+
+    public GameObject GetPosition(int x, int y)
     {
-        // Calculate the world position based on board dimensions and tile size
-        float tileSize = 1.0f; // Adjust this based on your board size
-        float offset = tileSize / 2.0f;
-        return new Vector3(x * tileSize + offset, 0.0f, y * tileSize + offset);
+        return positions[x, y];
     }
+    public void SetPositionEmpty(int x, int y)
+    {
+        positions[x, y] = null;
+    }
+
+    private GameObject[,] positions = new GameObject[8, 8];
 
     public GameObject whitePawnPrefab;
     public GameObject whiteRookPrefab;
@@ -50,11 +62,11 @@ public class ChessPiece : MonoBehaviour
     public GameObject blackQueenPrefab;
     public GameObject blackKingPrefab;
 
-    public GameObject movePlatePrefab;
+    public GameObject MovePlatePrefab;
+
 
     void SpawnSinglePiece(int x, int y, string pieceType, string color)
     {
-        //Debug.Log("Spawning " + pieceType + " at " + x + ", " + y);
         GameObject prefab = null;
         switch (pieceType)
         {
@@ -98,41 +110,48 @@ public class ChessPiece : MonoBehaviour
 
         if (prefab != null)
         {
-            GameObject newPiece = Instantiate(prefab, new Vector3(x, y, 0), Quaternion.identity);
-            ChessPiece piece = newPiece.AddComponent<ChessPiece>();
+            GameObject newPiece = Instantiate(prefab, new Vector3(x, y, -1), Quaternion.identity);
+            ChessPiece piece = null;
+
+            switch (pieceType)
+            {
+                case "White Pawn":
+                case "Black Pawn":
+                    piece = newPiece.AddComponent<Pawn>();
+                    break;
+                case "White Rook":
+                case "Black Rook":
+                    piece = newPiece.AddComponent<Rook>();
+                    break;
+                case "White Knight":
+                case "Black Knight":
+                    piece = newPiece.AddComponent<Knight>();
+                    break;
+                case "White Bishop":
+                case "Black Bishop":
+                    piece = newPiece.AddComponent<Bishop>();
+                    break;
+                case "White Queen":
+                case "Black Queen":
+                    piece = newPiece.AddComponent<Queen>();
+                    break;
+                case "White King":
+                case "Black King":
+                    piece = newPiece.AddComponent<King>();
+                    break;
+            }
 
             // Initialize the piece
-            piece.SetBoardPosition(x, y);
-            piece.playerColor = color;
-            piece.pieceType = pieceType;
+            if (piece != null)
+            {
+                piece.SetBoardPosition(x, y);
+                piece.playerColor = color;
+                piece.pieceType = pieceType;
+            }
         }
     }
-    public virtual void CreateMovePlate(int x, int y)
-    {
-        // Check if the position is on the board
-        if (x >= 0 && x < 8 && y >= 0 && y < 8)
-        {
-            // Instantiate the move plate prefab
-            GameObject mp = Instantiate(movePlatePrefab, new Vector3(x, y, -1), Quaternion.identity);
 
-            // Set the reference to this pawn
-            mp.GetComponent<MovePlate>().SetReference(gameObject);
 
-            Debug.Log("MovePlate instantiated at position: " + mp.transform.position);
-            Debug.Log("Creating move plate at position: " + x + ", " + y);
-
-        }
-    }
-    public virtual void GenerateMovePlates()
-    {
-        // Pawns can move forward one square
-        CreateMovePlate(_xBoard, _yBoard + 1);
-        Debug.Log("Generating move plates for piece at position: " + _xBoard + ", " + _yBoard);
-
-        // Pawns can capture diagonally
-        CreateMovePlate(_xBoard - 1, _yBoard + 1);
-        CreateMovePlate(_xBoard + 1, _yBoard + 1);
-    }
     void SpawnAllPieces()
     {
         //// Spawn pawns
@@ -156,60 +175,35 @@ public class ChessPiece : MonoBehaviour
 
     }
 
+    private Vector3 screenPoint;
+    private Vector3 offset;
 
-
-    // Implement specific movement logic for each piece type
-    public virtual bool CanMove(int newX, int newY, ChessBoard board)
+    void OnMouseDown()
     {
-        // Check if move is within board boundaries
-        if (0 <= newX && newX < board.GetXBoard() && 0 <= newY && newY < board.GetYBoard())
-        {
-            // Check for diagonal movement
-            if (Math.Abs(newX - _xBoard) != Math.Abs(newY - _yBoard))
-            {
-                return false;
-            }
+        // Translate the chess piece's position from world space to screen space
+        screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
 
-            // Check if path is clear and destination is valid
-            for (int x = Math.Min(_xBoard, newX) + 1, y = Math.Min(_yBoard, newY) + 1; x < Math.Max(_xBoard, newX) && y < Math.Max(_yBoard, newY); x++, y++)
-            {
-                if (board.GetPosition(x, y) != null)
-                {
-                    return false;
-                }
-            }
-
-            // Check if destination is friendly or empty
-            if (board.GetPosition(newX, newY) == null || board.GetPosition(newX, newY).GetComponent<ChessPiece>().playerColor != playerColor)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        // Calculate the offset between the top left corner of the screen and the chess piece's position
+        offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
     }
 
-    public void Move(int newX, int newY, ChessBoard board)
+    void OnMouseDrag()
     {
+        // Translate the mouse position from screen space to world space
+        Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+        Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
 
-        if (CanMove(newX, newY, board))
-        {
-            // Update board position
-            board.SetPositionEmpty(_xBoard, _yBoard);
-            _xBoard = newX;
-            _yBoard = newY;
-            board.SetPosition(gameObject);
+        // Round the position to the nearest cell
+        cursorPosition.x = Mathf.Round(cursorPosition.x);
+        cursorPosition.y = Mathf.Round(cursorPosition.y);
 
-            // Check for captures and other special actions based on move
-        }
-    }
-    public void DestroyMovePlates()
-    {
-        GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
-        foreach (GameObject movePlate in movePlates)
-        {
-            Destroy(movePlate);
-        }
+        // Clamp the position to the board's boundaries
+        cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, 7); // Assuming an 8x8 board
+        cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, 7);
+
+        // Move the chess piece to the cursor's position
+        transform.position = cursorPosition;
     }
 
 }
+
