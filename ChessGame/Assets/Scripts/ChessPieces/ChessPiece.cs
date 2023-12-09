@@ -10,6 +10,18 @@ public class ChessPiece : MonoBehaviour
     public string playerColor;
     public bool isWhite;
 
+
+    public void SetPlayerColor(string color)
+    {
+        playerColor = color;
+    }
+
+    public void SetPieceType(string type)
+    {
+        pieceType = type;
+    }
+
+
     public void Start()
     {
         SpawnAllPieces();
@@ -61,9 +73,6 @@ public class ChessPiece : MonoBehaviour
     public GameObject blackBishopPrefab;
     public GameObject blackQueenPrefab;
     public GameObject blackKingPrefab;
-
-    public GameObject MovePlatePrefab;
-
 
     void SpawnSinglePiece(int x, int y, string pieceType, string color)
     {
@@ -144,9 +153,10 @@ public class ChessPiece : MonoBehaviour
             // Initialize the piece
             if (piece != null)
             {
+                piece.isWhite = color == "white";
                 piece.SetBoardPosition(x, y);
-                piece.playerColor = color;
-                piece.pieceType = pieceType;
+                piece.SetPlayerColor(color);
+                piece.SetPieceType(pieceType);
             }
         }
     }
@@ -175,35 +185,60 @@ public class ChessPiece : MonoBehaviour
 
     }
 
-    private Vector3 screenPoint;
-    private Vector3 offset;
+    
+        private Vector3 screenPoint;
+        private Vector3 offset;
 
-    void OnMouseDown()
-    {
-        // Translate the chess piece's position from world space to screen space
-        screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        public void MouseDragginDown(GameObject gameObject)
+        {
+            // Translate the chess piece's position from world space to screen space
+            screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
 
-        // Calculate the offset between the top left corner of the screen and the chess piece's position
-        offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-    }
+            // Calculate the offset between the top left corner of the screen and the chess piece's position
+            offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+        }
 
-    void OnMouseDrag()
-    {
-        // Translate the mouse position from screen space to world space
-        Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-        Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
+        public void MouseDragging(GameObject gameObject)
+        {
+            // Translate the mouse position from screen space to world space
+            Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+            Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
 
-        // Round the position to the nearest cell
-        cursorPosition.x = Mathf.Round(cursorPosition.x);
-        cursorPosition.y = Mathf.Round(cursorPosition.y);
+            // Round the position to the nearest cell
+            cursorPosition.x = Mathf.Round(cursorPosition.x);
+            cursorPosition.y = Mathf.Round(cursorPosition.y);
 
-        // Clamp the position to the board's boundaries
-        cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, 7); // Assuming an 8x8 board
-        cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, 7);
+            // Clamp the position to the board's boundaries
+            cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, 7); // Assuming an 8x8 board
+            cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, 7);
 
-        // Move the chess piece to the cursor's position
-        transform.position = cursorPosition;
-    }
+            // Move the chess piece to the cursor's position
+            gameObject.transform.position = cursorPosition;
+        }
 
+        public virtual void Move(GameObject gameObject, int x, int y)
+        {
+            // Check if the move is valid
+            // If valid, move the piece, update the positions array, and finish the move
+            if (isValidMove(x, y))
+        { 
+            // Move the piece
+            MouseDragging(gameObject);
+            // Move the piece and update the positions array
+            FinishMove();
+            }
+        }
+
+        public virtual bool isValidMove(int x, int y)
+        {
+            return true;
+        }
+
+        public void FinishMove()
+        {
+            // Signal the GameManager to change turns
+            GameManager.instance.ChangeTurn();
+        }
+   
 }
 

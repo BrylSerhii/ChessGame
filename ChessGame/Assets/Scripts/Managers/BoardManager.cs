@@ -1,19 +1,38 @@
-using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 
-public class ChessBoard : MonoBehaviour
+public class BoardManager : MonoBehaviour
 {
 
+    // The game board
     [SerializeField] private BoardTile _tilePrefab;
-
     [SerializeField] private GameObject[,] positions = new GameObject[8, 8];
-
     [SerializeField] private Transform _cam;
 
+    // The selected piece
+    private GameObject Piece_Selected;
 
-    public int _xBoard;
-    public int _yBoard;
+    public GameObject[,] Board = new GameObject[8, 8];
+
+    // The current player's color
+    private string currentPlayerColor = "White";
+
+    public int _xBoard = 8;
+    public int _yBoard = 8;
+
+    // Singleton instance
+    public static BoardManager instance;
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Debug.LogError("Another instance of BoardManager already exists!");
+        }
+    }
+
     void Start()
     {
 
@@ -23,7 +42,6 @@ public class ChessBoard : MonoBehaviour
 
 
     }
-
     private void GenerateBoard()
     {
         for (int x = 0; x < 8; x++)
@@ -35,9 +53,13 @@ public class ChessBoard : MonoBehaviour
 
                 var isOffset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
                 spawnedTile.Init(isOffset);
+
+                // Store the tile in the positions array
+                positions[y, x] = spawnedTile.gameObject;
             }
         }
     }
+
 
     public void SetPositionEmpty(int x, int y)
     {
@@ -48,8 +70,4 @@ public class ChessBoard : MonoBehaviour
     {
         return positions[y, x];
     }
-
-
-
-
 }

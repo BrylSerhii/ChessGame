@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6594055516243265691}
   - component: {fileID: 2012946360020559701}
-  - component: {fileID: -1353428641618507324}
   - component: {fileID: 634698241949347246}
   m_Layer: 0
   m_Name: WhiteQueen
@@ -86,35 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-1353428641618507324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6543823887861168942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d043d14357b21af4eb495d6235a31f7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _xBoard: 0
-  _yBoard: 0
-  pieceType: 
-  playerColor: 
-  whitePawnPrefab: {fileID: 0}
-  whiteRookPrefab: {fileID: 0}
-  whiteKnightPrefab: {fileID: 0}
-  whiteBishopPrefab: {fileID: 0}
-  whiteQueenPrefab: {fileID: 0}
-  whiteKingPrefab: {fileID: 0}
-  blackPawnPrefab: {fileID: 0}
-  blackRookPrefab: {fileID: 0}
-  blackKnightPrefab: {fileID: 0}
-  blackBishopPrefab: {fileID: 0}
-  blackQueenPrefab: {fileID: 0}
-  blackKingPrefab: {fileID: 0}
-  movePlatePrefab: {fileID: 0}
 --- !u!61 &634698241949347246
 BoxCollider2D:
   m_ObjectHideFlags: 0
