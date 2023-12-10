@@ -1,2 +1,3 @@
 # ChessGame
- chess game project oop
+ chess game project oop by bryl serhii
+ 
