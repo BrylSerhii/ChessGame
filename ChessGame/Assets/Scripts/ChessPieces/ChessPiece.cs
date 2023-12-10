@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 public class ChessPiece : MonoBehaviour
 {
+    public GameController GameController;
 
     public int _xBoard;
     public int _yBoard;
@@ -10,7 +11,17 @@ public class ChessPiece : MonoBehaviour
     public string playerColor;
     public bool isWhite;
 
+    public bool DoubleStep = false;
+    public bool MovingY = false;
+    public bool MovingX = false;
 
+    private Vector3 oldPosition;
+    private Vector3 newPositionY;
+    private Vector3 newPositionX;
+    public bool moved = false;
+    public float HighestRankY = 3.5f;
+    public float LowestRankY = -3.5f;
+    public float MoveSpeed = 20;
     public void SetPlayerColor(string color)
     {
         playerColor = color;
@@ -24,7 +35,22 @@ public class ChessPiece : MonoBehaviour
 
     public void Start()
     {
+        if (GameController == null) GameController = FindObjectOfType<GameController>();
         SpawnAllPieces();
+    }
+    void Update()
+    {
+        if (MovingY || MovingX)
+        {
+            if (Mathf.Abs(oldPosition.x - newPositionX.x) == Mathf.Abs(oldPosition.y - newPositionX.y))
+            {
+                MoveDiagonally();
+            }
+            else
+            {
+                MoveSideBySide();
+            }
+        }
     }
     public void SetBoardPosition(int x, int y)
     {
@@ -198,47 +224,158 @@ public class ChessPiece : MonoBehaviour
             offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
         }
 
-        public void MouseDragging(GameObject gameObject)
+    void OnMouseDown()
+    {
+        if (GameController.SelectedPiece != null && GameController.SelectedPiece.GetComponent<ChessPiece>().IsMoving() == true)
         {
-            // Translate the mouse position from screen space to world space
-            Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-            Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
-
-            // Round the position to the nearest cell
-            cursorPosition.x = Mathf.Round(cursorPosition.x);
-            cursorPosition.y = Mathf.Round(cursorPosition.y);
-
-            // Clamp the position to the board's boundaries
-            cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, 7); // Assuming an 8x8 board
-            cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, 7);
-
-            // Move the chess piece to the cursor's position
-            gameObject.transform.position = cursorPosition;
+            // Prevent clicks during movement
+            return;
         }
 
-        public virtual void Move(GameObject gameObject, int x, int y)
+        if (GameController.SelectedPiece == this.gameObject)
         {
-            // Check if the move is valid
-            // If valid, move the piece, update the positions array, and finish the move
-            if (isValidMove(x, y))
-        { 
-            // Move the piece
-            MouseDragging(gameObject);
-            // Move the piece and update the positions array
-            FinishMove();
+            GameController.DeselectPiece();
+        }
+        else
+        {
+            if (GameController.SelectedPiece == null)
+            {
+                GameController.SelectPiece(this.gameObject);
+            }
+            else
+            {
+                if (this.tag == GameController.SelectedPiece.tag)
+                {
+                    GameController.SelectPiece(this.gameObject);
+                }
+                else if ((this.tag == "White" && GameController.SelectedPiece.tag == "Black") || (this.tag == "Black" && GameController.SelectedPiece.tag == "White"))
+                {
+                    GameController.SelectedPiece.GetComponent<ChessPiece>().MovePiece(this.transform.position);
+                }
+            }
+        }
+    }
+
+
+    public bool MovePiece(Vector3 newPosition, bool castling = false)
+    {
+        ChessPiece encounteredEnemy = null;
+
+        newPosition.z = this.transform.position.z;
+        this.oldPosition = this.transform.position;
+
+        if (castling || IsValidMove(oldPosition, newPosition, out encounteredEnemy))
+        {
+            // Double-step
+            if (this.name.Contains("Pawn") && Mathf.Abs(oldPosition.y - newPosition.y) == 2)
+            {
+                this.DoubleStep = true;
+            }
+            // Promotion
+           
+            // Castling
+        
+            this.moved = true;
+
+            this.newPositionY = newPosition;
+            this.newPositionY.x = this.transform.position.x;
+            this.newPositionX = newPosition;
+            MovingY = true; // Start movement
+
+            Destroy(encounteredEnemy);
+            return true;
+        }
+        else
+        {
+            GameController.GetComponent<AudioSource>().Play();
+            return false;
+        }
+    }
+    public virtual bool IsValidMove(Vector3 oldPosition, Vector3 newPosition, out ChessPiece encounteredEnemy, bool excludeCheck = false)
+    {
+        bool isValid = false;
+        encounteredEnemy = GetPieceOnPosition(newPosition.x, newPosition.y);
+        // Default implementation
+        return true;
+    }
+
+    public ChessPiece GetPieceOnPosition(float positionX, float positionY, string color = null)
+    {
+        // Get all instances of the ChessPiece class
+        ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
+
+        foreach (ChessPiece piece in allPieces)
+        {
+            // Check if the piece's position matches the given position
+            if (piece.transform.position.x == positionX && piece.transform.position.y == positionY)
+            {
+                // If a color is specified, check if the piece's color matches the given color
+                if (color == null || piece.playerColor.ToLower() == color.ToLower())
+                {
+                    return piece;
+                }
             }
         }
 
-        public virtual bool isValidMove(int x, int y)
-        {
-            return true;
-        }
+        // If no matching piece is found, return null
+        return null;
+    }
 
-        public void FinishMove()
+    void MoveSideBySide()
+    {
+        if (MovingY == true)
         {
-            // Signal the GameManager to change turns
-            GameManager.instance.ChangeTurn();
+            this.transform.SetPositionAndRotation(Vector3.Lerp(this.transform.position, newPositionY, Time.deltaTime * MoveSpeed), this.transform.rotation);
+            if (this.transform.position == newPositionY)
+            {
+                MovingY = false;
+                MovingX = true;
+            }
         }
-   
+        if (MovingX == true)
+        {
+            this.transform.SetPositionAndRotation(Vector3.Lerp(this.transform.position, newPositionX, Time.deltaTime * MoveSpeed), this.transform.rotation);
+            if (this.transform.position == newPositionX)
+            {
+                this.transform.SetPositionAndRotation(newPositionX, this.transform.rotation);
+                MovingX = false;
+                if (GameController.SelectedPiece != null)
+                {
+                    GameController.DeselectPiece();
+                    GameController.EndTurn();
+                }
+            }
+        }
+    }
+
+    void MoveDiagonally()
+    {
+        if (MovingY == true)
+        {
+            this.transform.SetPositionAndRotation(Vector3.Lerp(this.transform.position, newPositionX, Time.deltaTime * MoveSpeed), this.transform.rotation);
+            if (this.transform.position == newPositionX)
+            {
+                this.transform.SetPositionAndRotation(newPositionX, this.transform.rotation);
+                MovingY = false;
+                MovingX = false;
+                if (GameController.SelectedPiece != null)
+                {
+                    GameController.DeselectPiece();
+                    GameController.EndTurn();
+                }
+            }
+        }
+    }
+    public bool IsMoving()
+    {
+        return MovingX || MovingY;
+    }
+
+    enum Direction
+    {
+        Horizontal,
+        Vertical,
+        Diagonal
+    }
 }
 

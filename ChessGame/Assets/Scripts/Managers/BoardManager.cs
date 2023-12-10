@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
-
+    public GameController GameController;
     // The game board
     [SerializeField] private BoardTile _tilePrefab;
     [SerializeField] private GameObject[,] positions = new GameObject[8, 8];
@@ -35,6 +35,7 @@ public class BoardManager : MonoBehaviour
 
     void Start()
     {
+        if (GameController == null) GameController = FindObjectOfType<GameController>();
 
         _cam.transform.position = new Vector3((float)_xBoard / 2 - 0.5f, (float)_yBoard / 2 - 0.5f, -10);
 

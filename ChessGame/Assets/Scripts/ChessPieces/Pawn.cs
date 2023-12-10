@@ -1,118 +1,51 @@
-using System;
 using UnityEngine;
 
 public class Pawn : ChessPiece
 {
-    // The game board
-    public GameObject[] Board;
-
-    // Whether this is the pawn's first move
-    private bool isFirstMove = true;
-
-    public override void Move(GameObject gameObject, int targetX, int targetY)
+    public override bool IsValidMove(Vector3 oldPosition, Vector3 newPosition, out ChessPiece encounteredEnemy, bool excludeCheck = false)
     {
-        if (isValidMove(targetX, targetY))
-        {
+        bool isValid = false;
+        encounteredEnemy = GetPieceOnPosition(newPosition.x, newPosition.y);
 
-            // Get the position of the selected pawn on the board
-            Vector2Int position = new Vector2Int();
-            for (int i = 0; i < 8; i++)
+        // If the new position is on the rank above (White) or below (Black)
+        if ((playerColor == "white" && oldPosition.y + 1 == newPosition.y) ||
+           (playerColor == "black" && oldPosition.y - 1 == newPosition.y))
+        {
+            // If moving forward
+            if (oldPosition.x == newPosition.x && encounteredEnemy == null)
             {
-                for (int j = 0; j < 8; j++)
+                isValid = true;
+            }
+            // If moving diagonally
+            else if (oldPosition.x == newPosition.x - 1 || oldPosition.x == newPosition.x + 1)
+            {
+                // Check if en passant is available
+                if (encounteredEnemy == null)
                 {
-                    if (BoardManager.instance.Board[j, i] == this.gameObject)
+                    encounteredEnemy = GetPieceOnPosition(newPosition.x, oldPosition.y);
+                    if (encounteredEnemy != null && encounteredEnemy.DoubleStep == false)
                     {
-                        position = new Vector2Int(i, j);
-                        break;
+                        encounteredEnemy = null;
                     }
                 }
-            }
-
-            // The pawn can always move forward one square
-            if (position.y + 1 < 8)
-            {
-                GameObject boardPiece = BoardManager.instance.Board[position.y + 1, position.x];
-                if (boardPiece != null)
+                // If an enemy piece is encountered
+                if (encounteredEnemy != null && encounteredEnemy.playerColor != this.playerColor)
                 {
-                    boardPiece.GetComponent<SpriteRenderer>().enabled = true;
+                    isValid = true;
                 }
             }
-
-            // If this is the pawn's first move, it can move forward two squares
-            if (isFirstMove && position.y + 2 < 8)
-            {
-                GameObject boardPiece = BoardManager.instance.Board[position.y + 2, position.x];
-                if (boardPiece != null)
-                {
-                    boardPiece.GetComponent<SpriteRenderer>().enabled = true;
-                }
-            }
-
-            // The pawn can capture diagonally
-            if (position.y + 1 < 8 && position.x - 1 >= 0)
-            {
-                GameObject boardPiece = BoardManager.instance.Board[position.y + 1, position.x - 1];
-                if (boardPiece != null)
-                {
-                    boardPiece.GetComponent<SpriteRenderer>().enabled = true;
-                }
-            }
-            if (position.y + 1 < 8 && position.x + 1 < 8)
-            {
-                GameObject boardPiece = BoardManager.instance.Board[position.y + 1, position.x + 1];
-                if (boardPiece != null)
-                {
-                    boardPiece.GetComponent<SpriteRenderer>().enabled = true;
-                }
-            }
-
-            FinishMove();
         }
+        // Double-step
+        else if ((playerColor == "white" && oldPosition.x == newPosition.x && oldPosition.y + 2 == newPosition.y) ||
+                 (playerColor == "black" && oldPosition.x == newPosition.x && oldPosition.y - 2 == newPosition.y))
+        {
+            if (this.moved == false && GetPieceOnPosition(newPosition.x, newPosition.y) == null)
+            {
+                isValid = true;
+            }
+        }
+
+        return isValid;
     }
-    public override bool isValidMove(int targetX, int targetY)
-    {
-        // Calculate the difference between the current position and the target position
-        int deltaX = targetX - _xBoard;
-        int deltaY = targetY - _yBoard;
-
-        // Pawns can only move forward
-        if (isWhite)
-        {
-            // White pawns can only move up the board (increase in y)
-            if (deltaY <= 0)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            // Black pawns can only move down the board (decrease in y)
-            if (deltaY >= 0)
-            {
-                return false;
-            }
-        }
-
-        // Pawns can only move one square forward, or two squares if it's their first move
-        if (Math.Abs(deltaY) > 1 && !isFirstMove || Math.Abs(deltaY) > 2)
-        {
-            return false;
-        }
-
-        // Pawns can only move straight forward, unless they're capturing
-        if (deltaX != 0)
-        {
-            // If the pawn is not moving diagonally by one square, it's an invalid move
-            if (Math.Abs(deltaX) != 1 || Math.Abs(deltaY) != 1)
-            {
-                return false;
-            }
-
-            // TODO: Check if there's an enemy piece at the target position
-        }
-
-        // If none of the invalid conditions were met, the move is valid
-        return true;
-    }
-
 }
+
