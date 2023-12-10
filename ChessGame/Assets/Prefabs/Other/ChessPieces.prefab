@@ -44,10 +44,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda4fee906335c34281bb08f8484e3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameController: {fileID: 3631271285781196137, guid: bf3810984f25c9f40822298e8ca30609, type: 3}
+  chesspieces: {fileID: -6269731954999421518}
   _xBoard: 0
   _yBoard: 0
   pieceType: 
   playerColor: 
+  isWhite: 0
+  DoubleStep: 0
+  MovingY: 0
+  MovingX: 0
+  moved: 0
+  HighestRankY: 3.5
+  LowestRankY: -3.5
+  MoveSpeed: 20
   whitePawnPrefab: {fileID: 187706858587961596, guid: e9e24f4f8bdf69b498c9f5571f49cc8b, type: 3}
   whiteRookPrefab: {fileID: 6683317212700647206, guid: 4381cf6c12da6e34bb3435af66a53056, type: 3}
   whiteKnightPrefab: {fileID: 7513849038961747917, guid: 0111d373301aaa34689dd5afb574a93e, type: 3}
@@ -60,4 +70,3 @@ MonoBehaviour:
   blackBishopPrefab: {fileID: 820066468152149159, guid: cc78535276d7d5947b9d6d816c606f1e, type: 3}
   blackQueenPrefab: {fileID: 1704973274571731905, guid: fff3b39918558a64ca6796c78b1d83c0, type: 3}
   blackKingPrefab: {fileID: 5223177334428164066, guid: 212b319ea727d6547b2d49ab237148b5, type: 3}
-  movePlatePrefab: {fileID: 0}

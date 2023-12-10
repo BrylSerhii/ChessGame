@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 494066536633342890}
   - component: {fileID: 5373567178286259068}
   - component: {fileID: 1847644982366370577}
+  - component: {fileID: 581085883456847522}
   m_Layer: 0
   m_Name: BlackQueen
   m_TagString: Untagged
@@ -130,3 +131,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.28, y: 1.28}
   m_EdgeRadius: 0
+--- !u!114 &581085883456847522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704973274571731905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda4fee906335c34281bb08f8484e3a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameController: {fileID: 3631271285781196137, guid: bf3810984f25c9f40822298e8ca30609, type: 3}
+  pieces: {fileID: 75035872873644555, guid: 0d05ca71dc0936c47aeb3b849291e3a9, type: 3}
+  _xBoard: 0
+  _yBoard: 0
+  pieceType: 
+  playerColor: 
+  isWhite: 0
+  DoubleStep: 0
+  MovingY: 0
+  MovingX: 0
+  moved: 0
+  HighestRankY: 3.5
+  LowestRankY: -3.5
+  MoveSpeed: 20
+  whitePawnPrefab: {fileID: 0}
+  whiteRookPrefab: {fileID: 0}
+  whiteKnightPrefab: {fileID: 0}
+  whiteBishopPrefab: {fileID: 0}
+  whiteQueenPrefab: {fileID: 0}
+  whiteKingPrefab: {fileID: 0}
+  blackPawnPrefab: {fileID: 0}
+  blackRookPrefab: {fileID: 0}
+  blackKnightPrefab: {fileID: 0}
+  blackBishopPrefab: {fileID: 0}
+  blackQueenPrefab: {fileID: 0}
+  blackKingPrefab: {fileID: 0}

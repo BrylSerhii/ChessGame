@@ -1,4 +1,6 @@
-
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -57,6 +59,11 @@ public class GameController : MonoBehaviour
                 {
                     hasValidMoves = true;
                 }
+
+                if (piece.name.Contains("Pawn"))
+                {
+                    piece.GetComponent<ChessPiece>().DoubleStep = false;
+                }
             }
         }
         else
@@ -66,6 +73,15 @@ public class GameController : MonoBehaviour
                 if (hasValidMoves == false && HasValidMoves(piece.gameObject))
                 {
                     hasValidMoves = true;
+                }
+
+                if (piece.name.Contains("Pawn"))
+                {
+                    piece.GetComponent<ChessPiece>().DoubleStep = false;
+                }
+                else if (piece.name.Contains("King"))
+                {
+                    kingIsInCheck = piece.GetComponent<ChessPiece>().IsInCheck(piece.position);
                 }
             }
         }
@@ -86,7 +102,7 @@ public class GameController : MonoBehaviour
     bool HasValidMoves(GameObject piece)
     {
         ChessPiece pieceController = piece.GetComponent<ChessPiece>();
-        ChessPiece encounteredEnemy;
+        GameObject encounteredEnemy;
 
         foreach (Transform square in Board.transform)
         {
