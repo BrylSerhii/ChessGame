@@ -326,7 +326,7 @@ public class ChessPiece : MonoBehaviour
             return false;
         }
     }
-    public bool IsValidMove(Vector3 oldPosition, Vector3 newPosition, out GameObject encounteredEnemy, bool excludeCheck = false)
+    public virtual bool IsValidMove(Vector3 oldPosition, Vector3 newPosition, out GameObject encounteredEnemy, bool excludeCheck = false)
     {
         bool isValid = false;
         encounteredEnemy = GetPieceOnPosition(newPosition.x, newPosition.y);

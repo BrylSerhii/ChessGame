@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
             SelectedPiece = piece;
 
             // Highlight
-            SelectedPiece.GetComponent<SpriteRenderer>().color = Color.yellow;
+            SelectedPiece.GetComponent<SpriteRenderer>().color = Color.green;
 
             // Put above other pieces
             Vector3 newPosition = SelectedPiece.transform.position;
